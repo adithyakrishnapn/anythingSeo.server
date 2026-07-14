@@ -1,9 +1,17 @@
-import express from 'express';
+import app from './app.js';
 import env from './config/env.js';
-const app = express();
+import connectDB from './config/db.js';
 
+const startServer = async()=>{
+  try{
+    await connectDB();
+    app.listen(env.PORT, () => {
+      console.log(`Server is running on port ${env.PORT}`);
+    });
+  } catch (err) {
+    console.error(`Error starting server: ${err.message}`);
+    process.exit(1);
+  }
+};
 
-const PORT = env.PORT;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+startServer();
