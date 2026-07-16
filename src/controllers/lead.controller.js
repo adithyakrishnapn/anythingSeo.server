@@ -103,6 +103,9 @@ export const deleteLeadbyId = async (req, res) => {
 export const convertLeadToCustomer = async (req, res) => {
     try {
         const lead = await leadService.convertLeadToCustomer(req.params.id);
+        if(lead){
+            
+        }
         return res.status(200).json({
             success: true,
             message: 'Lead converted to customer successfully',

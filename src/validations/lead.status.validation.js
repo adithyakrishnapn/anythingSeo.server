@@ -14,4 +14,20 @@ const leadToCustomerValidation = async(req, res, next) => {
 
 };
 
-export default leadToCustomerValidation;
+const statusValidation = async(req,res,next)=>{
+    try{
+        const { id } = req.params;
+        const leadData = await Lead.findById(id);
+        const status = leadData.status;
+
+        if(status !== 'converted'){
+            return res.status(400).json({message: 'Lead is not converted to customer'});
+        }
+        next();
+    }catch(error){
+        return res.status(500).json({message: 'Internal server error'});
+    }
+}
+
+
+export { leadToCustomerValidation, statusValidation };
