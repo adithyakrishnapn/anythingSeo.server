@@ -5,7 +5,7 @@ export  const generateToken = (userId,email,role) =>{
     const token = jwt.sign(
         {
             userId,email,role
-        },env.JWT_SECRET,
+        },process.env.JWT_SECRET,
         {
             expiresIn:env.JWT_EXPIRES_IN
         });

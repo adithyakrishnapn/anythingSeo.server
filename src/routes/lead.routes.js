@@ -16,5 +16,4 @@ router.put('/add-activity/:id', leadController.addActivity);
 router.put('/delete-activity/:id', leadController.deleteActivity);
 
 
-
 export default router;

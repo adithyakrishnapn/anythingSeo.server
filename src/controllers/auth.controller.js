@@ -2,10 +2,22 @@ import * as userService from "../services/auth.service.js";
 import { comparePassword } from "../utils/comparePassword.js";
 import { hashPassword } from "../utils/hashPassword.js";
 import { generateToken } from "../utils/generateToken.js";
+import {verifyOTP} from "../services/otp.service.js";
+import welcomeTemplate from "../templates/welcome.template.js";
+import { sendEmail } from "../services/email.service.js";
 
 export const signupController = async (req, res) => {
     try {
-        const { name, email, phone, password } = req.body;
+        const { name, email, phone, password, otp } = req.body;
+
+        const otpCheck = await verifyOTP(email, otp);
+
+        if(!otpCheck) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid OTP"
+            });
+        }
 
         const emailCheck = await userService.findUserByEmail(email);
 
@@ -41,6 +53,9 @@ export const signupController = async (req, res) => {
             sameSite: "strict",
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
+
+        const html = welcomeTemplate(user.name, user.email);
+        await sendEmail(user.email, "Welcome to Our Service", html);
 
         return res.status(201).json({
             success: true,
