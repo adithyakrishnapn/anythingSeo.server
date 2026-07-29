@@ -6,7 +6,7 @@ import { generateResponse } from "../../ai/ollama.service.js";
 import {
     getLeadById,
     getLeadActivities,
-    updateLeadAnalysis
+    saveLeadAnalysis
 } from "../../tools/lead.tools.js";
 import { validateLeadAnalysis } from "./lead.validation.js";
 
@@ -60,7 +60,7 @@ Return ONLY valid JSON.
         validateLeadAnalysis(analysis);
 
         // 7. Save / Update Analysis
-        await updateLeadAnalysis(
+        await saveLeadAnalysis(
             leadId,
             analysis
         );

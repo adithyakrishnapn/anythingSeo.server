@@ -17,3 +17,11 @@ export const shouldSendFollowup = (lead, analysis) => {
     return true;
 };
 
+
+export const shouldCreateTaskForLead = (lead, analysis) => {
+    if (lead.status === "converted") return false;
+    if (lead.status === "lost") return false;
+    if (analysis.priority !== "High") return false;
+    if (!analysis.recommendedAction) return false;
+    return true;
+};

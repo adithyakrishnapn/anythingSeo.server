@@ -8,7 +8,7 @@ export const startLeadScheduler = () => {
         console.log("Running lead analysis job...");
 
         const leads = await getAllLeads();
-        analyzeLeadScheduler(leads);
+        await analyzeLeadScheduler(leads);
 
 
 
