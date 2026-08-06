@@ -4,6 +4,8 @@ import { getLeadById, getLeadAnalysisByLeadId } from "../tools/lead.tools.js";
 import { sendEmail } from "../services/email.service.js";
 import followupTemlate from "../templates/followup.template.js"
 import { createTaskForLead } from "../agents/task/task.agent.js";
+import { generateDailySummaryScheduler } from "../automation/summary/summary.automation.js";
+import { getSummaryStatistics } from "../tools/summary.tools.js";
 
 export const analyzeLeadController = async (req, res) => {
     try {
@@ -43,6 +45,17 @@ export const createTaskForLeadController = async (req,res) =>{
         }
         const task = await createTaskForLead(leadId);
         res.status(200).json({ success: true, message: "Task created successfully", data: task });
+    }catch(error){
+        console.error("AI Controller Error:", error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+export const summaryController = async (req,res) =>{
+    try{
+        const statistics = await getSummaryStatistics();
+        const stats = await generateDailySummaryScheduler(statistics);
+        res.status(200).json({ success: true, message: "Daily summary generated successfully", data: stats });
     }catch(error){
         console.error("AI Controller Error:", error);
         res.status(500).json({ success: false, message: error.message });

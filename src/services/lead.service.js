@@ -14,7 +14,7 @@ export const updateLead = async (id, leadData) => {
 }
 
 export const getLeads = async () => {
-    const leads = await Lead.find();
+    const leads = await Lead.find().sort({ createdAt: -1 });
     return leads;
 }
 

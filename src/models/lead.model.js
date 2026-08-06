@@ -36,16 +36,12 @@ const leadStructure = {
         required: true
     },
     notes: {
-        type: [String],
-        default: []
+        type: String,
+        default: ""
     },
     address: {
-        street: {
-            type: String,
-        },
-        city: {
-            type: String,
-        },
+        type: String,
+        required: true
     },
     createdAt: {
         type: Date,

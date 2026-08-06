@@ -52,7 +52,7 @@ export const createTaskForLeadTool = async (leadId, taskData = {}) => {
 
 
 export const getTaskByLeadId = async (leadId) => {
-    return (await Task.find({ relatedTo: leadId, relatedModel: "Lead" })).sort({ createdAt: -1 });
+    return (await Task.findOne({ relatedTo: leadId, relatedModel: "Lead" })).sort({ createdAt: -1 });
 }
 
 export const changeStatusByLeadId = async (leadId) => {

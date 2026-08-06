@@ -3,9 +3,7 @@ import mongoose from 'mongoose';
 const leadAIAnalysisStructure = {
     leadId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Lead",
         required: true,
-        unique: true
     },
 
     score: {
@@ -55,13 +53,16 @@ const leadAIAnalysisStructure = {
         type: Date,
         default: Date.now
     },
-    lastFollowupSent: {
+    followupSendAt: {
         type: Date,
-        default: null
     },
     followupCount: {
         type: Number,
         default: 0
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 };
 

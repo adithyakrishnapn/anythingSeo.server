@@ -1,4 +1,5 @@
 import Lead from '../models/lead.model.js';
+
 const leadToCustomerValidation = async(req, res, next) => {
     const {id} = req.params;
     const leadData = await Lead.findById(id);

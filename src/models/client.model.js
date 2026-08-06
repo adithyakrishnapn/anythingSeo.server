@@ -15,12 +15,11 @@ const clientStructure = {
     },
     company: {
         type: String,
-        reuired: true
+        required: true
     },
     leadId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Lead',
-        required: true
     },
 
     //lifeccle
@@ -57,11 +56,8 @@ const clientStructure = {
     },
 
     address: {
-        street: String,
-        city: String,
-        state: String,
-        country: String,
-        zip: String
+        type: String,
+        required: true
     },
 
     projects: [{
@@ -70,8 +66,8 @@ const clientStructure = {
     }],
 
     notes: {
-        type: [String],
-        default: []
+        type: String,
+        default: ""
     },
 
     activities: {

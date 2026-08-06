@@ -8,7 +8,7 @@ import taskRoutes from './task.routes.js';
 import leadRoutes from './lead.routes.js';
 import otpRoutes from './otp.routes.js';
 import aiRoutes from './ai.routes.js';
-
+import summaryRoutes from './summary.routes.js';
 
 const router = Router();
 
@@ -20,5 +20,6 @@ router.use('/tasks', taskRoutes);
 router.use('/leads', leadRoutes);
 router.use('/otp', otpRoutes);
 router.use('/ai', aiRoutes);
+router.use('/summary', summaryRoutes);
 
 export default router;

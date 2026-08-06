@@ -11,4 +11,5 @@ const validateFollowUpAnalysis = (email) => {
     return true;
 }
 
+
 export default validateFollowUpAnalysis;

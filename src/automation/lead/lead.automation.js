@@ -43,11 +43,11 @@ export const analyzeLeadScheduler = async (leads) => {
                         html
                     );
 
-                    lead.followupSendAt = new Date();
-                    lead.followupCount =
-                        (lead.followupCount || 0) + 1;
+                    analysis.followupSendAt = new Date();
+                    analysis.followupCount =
+                        (analysis.followupCount || 0) + 1;
 
-                    await lead.save();
+                    await analysis.save();
                 }
             }
 

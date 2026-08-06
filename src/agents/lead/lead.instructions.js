@@ -15,6 +15,18 @@ The JSON format should be:
     "reason":"",
     "recommendedAction":""
 }
+    
+priority:
+Must be exactly one of:
+- "Low"
+- "Medium"
+- "High"
+
+risk:
+Must be exactly one of:
+- "Low"
+- "Medium"
+- "High"
 
 Never return markdown.
 Never explain.

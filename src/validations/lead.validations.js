@@ -1,28 +1,66 @@
-const validateLead = (req, res, next) => {
-    const { name, email, phone, company, status, source, value, assignedTo } = req.body;
-    if (!name) {
-        return res.status(400).json({ error: 'Name is required' });
-    }
-    if (!email) {
-        return res.status(400).json({ error: 'Email is required' });
-    }
-    if (!phone) {
-        return res.status(400).json({ error: 'Phone is required' });
-    }
-    if (!company) {
-        return res.status(400).json({ error: 'Company is required' });
-    }
-    if (!status) {
-        return res.status(400).json({ error: 'Status is required' });
-    }
-    if (!source) {
-        return res.status(400).json({ error: 'Source is required' });
-    }
-    if (!assignedTo) {
-        return res.status(400).json({ error: 'Assigned To is required' });
-    }
+import { z } from "zod";
 
-    next();
-};
+export const leadValidationSchema = z.object({
 
-export default validateLead;
+    name: z
+        .string()
+        .trim()
+        .min(1, "Name is required"),
+
+    email: z
+        .email("Invalid email address"),
+
+    phone: z
+        .string()
+        .trim()
+        .regex(
+            /^[6-9]\d{9}$/,
+            "Invalid phone number"
+        ),
+
+    company: z
+        .string()
+        .trim()
+        .min(1, "Company is required"),
+
+    status: z.enum([
+        "new",
+        "contacted",
+        "converted",
+        "lost"
+    ]),
+
+    source: z.enum([
+        "website",
+        "referral",
+        "social media",
+        "other"
+    ]),
+
+    value: z
+        .number()
+        .nonnegative()
+        .optional(),
+
+    assignedTo: z
+        .string()
+        .trim()
+        .min(1, "Assigned To is required"),
+
+    notes: z
+        .string()
+        .trim()
+        .optional(),
+
+    address: z
+        .string()
+        .trim()
+        .min(5, "Address is required"),
+
+    activities: z
+        .array(
+            z.string().trim()
+        )
+        .optional()
+
+});

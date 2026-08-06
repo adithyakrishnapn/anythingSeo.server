@@ -1,6 +1,7 @@
 import * as leadService from "../services/lead.service.js"
-
-
+import * as clientService from "../services/client.service.js"
+import { date } from "zod";
+ 
 export const createLead = async (req, res) => {
     try {
         const lead = await leadService.createLead(req.body);
@@ -102,14 +103,34 @@ export const deleteLeadbyId = async (req, res) => {
 
 export const convertLeadToCustomer = async (req, res) => {
     try {
-        const lead = await leadService.convertLeadToCustomer(req.params.id);
+        const lead = await leadService.getLeadById(req.params.id);
+        if (!lead) {
+            return res.status(404).json({
+                success: false,
+                message: 'Lead not found'
+            })
+        }
         if(lead){
-            
+            const clientData = {
+                name: lead.name,
+                email: lead.email,
+                phone: lead.phone,
+                company: lead.company,
+                leadId: lead._id,
+                status: "active",
+                address: lead.address,
+                assignedTo: lead.assignedTo,
+                contractValue: lead.value,
+                notes: lead.notes,
+            };
+            await Promise.all([
+                leadService.convertLeadToCustomer(req.params.id),
+                clientService.createClient(clientData)
+            ]);
         }
         return res.status(200).json({
             success: true,
-            message: 'Lead converted to customer successfully',
-            data: lead
+            message: 'Lead converted to customer successfully'
         })
     } catch (error) {
         console.error('Error converting lead to customer:', error);
