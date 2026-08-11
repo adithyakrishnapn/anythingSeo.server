@@ -10,6 +10,7 @@ import otpRoutes from './otp.routes.js';
 import aiRoutes from './ai.routes.js';
 import summaryRoutes from './summary.routes.js';
 import settingsRoutes from './settings.routes.js';
+import uploadRoutes from './upload.routes.js';
 import { authMiddleware } from '../middlewares/auth.middleware.js';
 
 const router = Router();
@@ -26,5 +27,6 @@ router.use('/leads', authMiddleware, leadRoutes);
 router.use('/ai', authMiddleware, aiRoutes);
 router.use('/summary', authMiddleware, summaryRoutes);
 router.use('/settings', authMiddleware, settingsRoutes);
+router.use('/upload', authMiddleware, uploadRoutes);
 
 export default router;

@@ -3,6 +3,8 @@ import path from "path";
 import PDFDocument from "pdfkit";
 import PDF from "../models/pdf.model.js";
 import { updatePdfPath } from "./summary.service.js";
+import { uploadLocalFile } from "./cloudinary.service.js";
+import env from "../config/env.js";
 
 export const generatePDF = async (
     dataId,
@@ -38,8 +40,30 @@ export const generatePDF = async (
 
         stream.on("finish", async () => {
             try {
-                await updatePdfPath(dataId, fullPath, ownerId);
-                resolve(fullPath);
+                let finalPath = fullPath;
+
+                // Check if Cloudinary is configured
+                if (env.CLOUDINARY_CLOUD_NAME && env.CLOUDINARY_API_KEY && env.CLOUDINARY_API_SECRET) {
+                    try {
+                        const uploadResult = await uploadLocalFile(fullPath, {
+                            folder: "crm-pdfs",
+                            resource_type: "auto"
+                        });
+                        finalPath = uploadResult.secure_url;
+
+                        // Delete local file after successful upload
+                        fs.unlink(fullPath, (err) => {
+                            if (err) {
+                                console.error("Failed to delete local temporary PDF file:", err);
+                            }
+                        });
+                    } catch (uploadError) {
+                        console.error("Cloudinary upload failed, falling back to local file path:", uploadError);
+                    }
+                }
+
+                await updatePdfPath(dataId, finalPath, ownerId);
+                resolve(finalPath);
             } catch (err) {
                 reject(err);
             }

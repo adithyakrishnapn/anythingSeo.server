@@ -14,6 +14,10 @@ const env = {
   SMTP_PASSWORD: process.env.SMTP_PASSWORD,
   EMAIL_FROM: process.env.SMTP_FROM,
   GROK_API_KEY: process.env.GROK_API_KEY,
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+  APP_URI: process.env.APP_URI
 };
 
 export default env;
