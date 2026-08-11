@@ -1,5 +1,5 @@
 import Otp from "../models/otp.model.js";
-import { generateRandomOTP } from "../utils/generateOtp.js";
+import { generateRandomOTP } from "../utils/generateOTP.js";
 import { hashOTP } from "../utils/hashOTP.js";
 import { compareOTP } from "../utils/compareOTP.js";
 
