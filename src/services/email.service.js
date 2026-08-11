@@ -35,6 +35,38 @@ const sendEmail = async (to, subject, html, text = "", ownerId = null) => {
             }
         }
 
+        // If Resend API Key is configured, use the HTTPS API (ideal for Render/Railway where SMTP ports are blocked)
+        if (env.RESEND_API_KEY) {
+            console.log("Sending email using Resend HTTP API.");
+            
+            // On Resend free tier/onboarding, you can only send from onboarding@resend.dev unless you verify your domain
+            let fromEmail = "AnythingCRM <onboarding@resend.dev>";
+            if (env.EMAIL_FROM && !env.EMAIL_FROM.includes("gmail") && env.EMAIL_FROM.includes("@")) {
+                fromEmail = env.EMAIL_FROM;
+            }
+
+            const response = await fetch("https://api.resend.com/emails", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${env.RESEND_API_KEY}`
+                },
+                body: JSON.stringify({
+                    from: fromEmail,
+                    to: [to],
+                    subject: subject,
+                    html: html,
+                    text: text || undefined
+                })
+            });
+
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || `Resend API returned status ${response.status}`);
+            }
+            return data;
+        }
+
         console.log("Sending email using default SMTP fallback transporter.");
         return await transporter.sendMail({
             from: env.EMAIL_FROM,
