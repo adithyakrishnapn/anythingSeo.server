@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
 
 const summarySchema = new mongoose.Schema({
-
+    ownerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        index: true
+    },
     summaryDate: {
         type: Date,
         required: true,

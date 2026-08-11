@@ -5,6 +5,7 @@ import { generateToken } from "../utils/generateToken.js";
 import {verifyOTP} from "../services/otp.service.js";
 import welcomeTemplate from "../templates/welcome.template.js";
 import { sendEmail } from "../services/email.service.js";
+import UserSettings from "../models/UserSettings.js";
 
 export const signupController = async (req, res) => {
     try {
@@ -65,6 +66,9 @@ export const signupController = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role
+            },
+            onboarding: {
+                settingsConfigured: false
             }
         });
 
@@ -121,6 +125,9 @@ export const loginController = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
+        const settings = await UserSettings.findOne({ ownerId: user._id });
+        const settingsConfigured = !!(settings && (settings.email?.appPassword || settings.ai?.groqApiKey));
+
         return res.status(200).json({
             success: true,
             message: "Login successful",
@@ -129,6 +136,9 @@ export const loginController = async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role
+            },
+            onboarding: {
+                settingsConfigured
             }
         });
 
@@ -159,9 +169,15 @@ export const meController = async (req, res) => {
             });
         }
 
+        const settings = await UserSettings.findOne({ ownerId: req.user.userId });
+        const settingsConfigured = !!(settings && (settings.email?.appPassword || settings.ai?.groqApiKey));
+
         return res.status(200).json({
             success: true,
-            data: userData
+            data: userData,
+            onboarding: {
+                settingsConfigured
+            }
         });
 
     } catch (error) {

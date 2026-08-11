@@ -9,7 +9,8 @@ export const generatePDF = async (
     tag,
     fileName,
     directory,
-    callback
+    callback,
+    ownerId = null
 ) => {
     return new Promise((resolve, reject) => {
 
@@ -37,7 +38,7 @@ export const generatePDF = async (
 
         stream.on("finish", async () => {
             try {
-                await updatePdfPath(dataId, fullPath);
+                await updatePdfPath(dataId, fullPath, ownerId);
                 resolve(fullPath);
             } catch (err) {
                 reject(err);

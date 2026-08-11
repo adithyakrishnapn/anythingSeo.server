@@ -12,7 +12,8 @@ const env = {
   SMTP_PORT: process.env.SMTP_PORT,
   SMTP_EMAIL: process.env.SMTP_EMAIL,
   SMTP_PASSWORD: process.env.SMTP_PASSWORD,
-  EMAIL_FROM: process.env.SMTP_FROM
+  EMAIL_FROM: process.env.SMTP_FROM,
+  GROK_API_KEY: process.env.GROK_API_KEY,
 };
 
 export default env;

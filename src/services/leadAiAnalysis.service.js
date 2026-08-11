@@ -1,8 +1,11 @@
+import mongoose from "mongoose";
 import LeadAIAnalysis from "../models/LeadAIAnalysis.js";
 
-
-export const getLatestLeadPriorities = async () => {
+export const getLatestLeadPriorities = async (ownerId) => {
     return await LeadAIAnalysis.aggregate([
+        {
+            $match: { ownerId: new mongoose.Types.ObjectId(ownerId) }
+        },
         {
             $sort: { createdAt: -1 } // latest first
         },
@@ -22,7 +25,7 @@ export const getLatestLeadPriorities = async () => {
     ]);
 };
 
-export const getleadAnalysis = async (leadId) => {
-    return await LeadAIAnalysis.findOne({ leadId })
+export const getleadAnalysis = async (leadId, ownerId) => {
+    return await LeadAIAnalysis.findOne({ leadId, ownerId })
         .sort({ createdAt: -1 });
-}
+};

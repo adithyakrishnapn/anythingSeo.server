@@ -4,7 +4,7 @@ import followupInstructions from "./followUp.instructions.js";
 
 import validateFollowUpAnalysis from "./followup.validation.js";
 
-export const generateFollowUpAnalysis = async (lead, analysis) => {
+export const generateFollowUpAnalysis = async (lead, analysis, ownerId = null) => {
     const userPrompt = `
         Lead Details
 
@@ -19,7 +19,8 @@ export const generateFollowUpAnalysis = async (lead, analysis) => {
 
     const response = await generateResponse(
         followupInstructions,
-        userPrompt
+        userPrompt,
+        ownerId
     );
 
     const email = JSON.parse(response);

@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
 
 const notificationSchema = new mongoose.Schema({
-
+    ownerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        index: true
+    },
     title: {
         type: String,
         required: true

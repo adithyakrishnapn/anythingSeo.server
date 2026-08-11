@@ -2,11 +2,9 @@ import { generateDailySummary } from "../../agents/summary/summary.agent.js";
 import { sendEmail } from "../../services/email.service.js";
 import { summaryTemplate } from "../../templates/summary.template.js";
 import { createSummaryStatistics } from "../../tools/summary.tools.js";
-import {     } from "../../services/pdf.service.js";
+import { generatePDF } from "../../services/pdf.service.js";
 
-
-
-export const generateDailySummaryScheduler = async (statistics) => {
+export const generateDailySummaryScheduler = async (statistics, ownerId) => {
     try {
         const summary = await generateDailySummary(statistics);
 
@@ -15,60 +13,64 @@ export const generateDailySummaryScheduler = async (statistics) => {
         const stats = {
             ...statistics,
             summaryDate: today,
-
             summary: summary.summary,
-
             recommendations: summary.recommendations,
-
             risks: summary.risks,
-
             highlights: summary.highlights
         };
         console.log("Summary Statistics to be saved:", stats);
-        const savedSummary = await createSummaryStatistics(stats);
-        const pdfPath = await generatePDF(savedSummary._id, "daily-summary", `daily-summary-${today.toISOString().split('T')[0]}`, "pdfs/daily-summaries", (doc) => {
-            doc
-                .fontSize(22)
-                .text("CRM Daily Summary", {
-                    align: "center"
-                });
+        
+        const savedSummary = await createSummaryStatistics(stats, ownerId);
+        
+        const pdfPath = await generatePDF(
+            savedSummary._id, 
+            "daily-summary", 
+            `daily-summary-${today.toISOString().split('T')[0]}`, 
+            "pdfs/daily-summaries", 
+            (doc) => {
+                doc
+                    .fontSize(22)
+                    .text("CRM Daily Summary", {
+                        align: "center"
+                    });
 
-            doc.moveDown();
+                doc.moveDown();
 
-            doc.text(`Date : ${savedSummary.summaryDate.toDateString()}`);
+                doc.text(`Date : ${savedSummary.summaryDate.toDateString()}`);
 
-            doc.moveDown();
+                doc.moveDown();
 
-            doc.fontSize(16).text("Statistics");
+                doc.fontSize(16).text("Statistics");
 
-            doc.moveDown();
+                doc.moveDown();
 
-            doc.fontSize(12);
+                doc.fontSize(12);
 
-            doc.text(`Total Leads : ${savedSummary.totalLeads}`);
-            doc.text(`New Leads : ${savedSummary.newLeads}`);
-            doc.text(`Converted : ${savedSummary.convertedLeads}`);
+                doc.text(`Total Leads : ${savedSummary.totalLeads}`);
+                doc.text(`New Leads : ${savedSummary.newLeads}`);
+                doc.text(`Converted : ${savedSummary.convertedLeads}`);
 
-            doc.moveDown();
+                doc.moveDown();
 
-            doc.fontSize(16).text("AI Summary");
+                doc.fontSize(16).text("AI Summary");
 
-            doc.moveDown();
+                doc.moveDown();
 
-            doc.fontSize(12).text(savedSummary.summary);
+                doc.fontSize(12).text(savedSummary.summary);
 
-            doc.moveDown();
+                doc.moveDown();
 
-            doc.fontSize(16).text("Recommendations");
+                doc.fontSize(16).text("Recommendations");
 
-            savedSummary.recommendations.forEach(item =>
-                doc.text(`• ${item}`)
-            );
-        });
-
+                savedSummary.recommendations.forEach(item =>
+                    doc.text(`• ${item}`)
+                );
+            },
+            ownerId
+        );
 
         const html = summaryTemplate(summary.summary, summary.recommendations, summary.risks, summary.highlights);
-        await sendEmail(process.env.SUMMARY_EMAIL, "Daily CRM Summary", html);
+        await sendEmail(process.env.SUMMARY_EMAIL || "admin@example.com", "Daily CRM Summary", html, "", ownerId);
         return summary;
     } catch (error) {
         console.error("Error generating daily summary:", error);

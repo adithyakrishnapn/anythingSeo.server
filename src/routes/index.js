@@ -9,17 +9,22 @@ import leadRoutes from './lead.routes.js';
 import otpRoutes from './otp.routes.js';
 import aiRoutes from './ai.routes.js';
 import summaryRoutes from './summary.routes.js';
+import settingsRoutes from './settings.routes.js';
+import { authMiddleware } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
 
 router.use('/auth', authRoutes);
-router.use('/clients', clientRoutes);
-router.use('/projects', projectRoutes);
-router.use('/tasks', taskRoutes);
-router.use('/leads', leadRoutes);
 router.use('/otp', otpRoutes);
-router.use('/ai', aiRoutes);
-router.use('/summary', summaryRoutes);
+
+// Protected routes
+router.use('/clients', authMiddleware, clientRoutes);
+router.use('/projects', authMiddleware, projectRoutes);
+router.use('/tasks', authMiddleware, taskRoutes);
+router.use('/leads', authMiddleware, leadRoutes);
+router.use('/ai', authMiddleware, aiRoutes);
+router.use('/summary', authMiddleware, summaryRoutes);
+router.use('/settings', authMiddleware, settingsRoutes);
 
 export default router;

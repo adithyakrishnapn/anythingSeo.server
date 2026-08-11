@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
 
 const clientStructure = {
+    ownerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        index: true
+    },
     name:{
         type: String,
         required: true
@@ -59,11 +65,6 @@ const clientStructure = {
         type: String,
         required: true
     },
-
-    projects: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Project'
-    }],
 
     notes: {
         type: String,

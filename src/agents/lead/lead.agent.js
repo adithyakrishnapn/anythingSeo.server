@@ -12,18 +12,18 @@ import { validateLeadAnalysis } from "./lead.validation.js";
 
 
 
-export const analyzeLead = async (leadId) => {
+export const analyzeLead = async (leadId, ownerId = null) => {
     try {
 
         // 1. Fetch Lead
-        const lead = await getLeadById(leadId);
+        const lead = await getLeadById(leadId, ownerId);
 
         if (!lead) {
             throw new Error("Lead not found.");
         }
 
         // 2. Fetch Activities / Notes
-        const { activities, notes } = await getLeadActivities(leadId);
+        const { activities, notes } = await getLeadActivities(leadId, ownerId);
 
         // 3. Build User Prompt
         const userPrompt = `
@@ -44,7 +44,8 @@ Return ONLY valid JSON.
         // 4. Generate AI Response
         const response = await generateResponse(
             leadInstructions,
-            userPrompt
+            userPrompt,
+            ownerId
         );
 
         // 5. Parse Response
@@ -62,7 +63,8 @@ Return ONLY valid JSON.
         // 7. Save / Update Analysis
         await saveLeadAnalysis(
             leadId,
-            analysis
+            analysis,
+            ownerId
         );
 
         // 8. Return Analysis

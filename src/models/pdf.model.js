@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
 
 const pdfSchema = new mongoose.Schema({
+    ownerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        index: true
+    },
     dataId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,

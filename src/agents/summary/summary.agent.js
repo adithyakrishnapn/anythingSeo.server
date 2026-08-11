@@ -5,7 +5,7 @@ import {
     validateSummaryStatistics
 } from "./summary.validation.js";
 
-export const generateDailySummary = async (statistics) => {
+export const generateDailySummary = async (statistics, ownerId = null) => {
 
     validateSummaryStatistics(statistics);
 
@@ -17,7 +17,8 @@ ${JSON.stringify(statistics, null, 2)}
 
     const response = await generateResponse(
         summaryInstructions,
-        userPrompt
+        userPrompt,
+        ownerId
     );
 
     const parsedResponse = JSON.parse(response);

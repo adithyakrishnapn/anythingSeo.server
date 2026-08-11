@@ -1,7 +1,81 @@
 import mongoose from "mongoose";
 
-const taskSchema = new mongoose.Schema({
+const attachmentSchema = new mongoose.Schema(
+    {
+        fileName: {
+            type: String,
+            required: true
+        },
 
+        fileUrl: {
+            type: String,
+            required: true
+        },
+
+        fileType: {
+            type: String,
+            enum: [
+                "image",
+                "pdf",
+                "document",
+                "spreadsheet",
+                "other"
+            ]
+        },
+
+        uploadedAt: {
+            type: Date,
+            default: Date.now
+        }
+    },
+    { _id: false }
+);
+
+const commentSchema = new mongoose.Schema(
+    {
+        message: {
+            type: String,
+            required: true,
+            trim: true
+        },
+
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        },
+
+        createdAt: {
+            type: Date,
+            default: Date.now
+        }
+    },
+    { _id: false }
+);
+
+const historySchema = new mongoose.Schema(
+    {
+        action: String,
+
+        performedBy: {
+            type: String,
+            default: "System"
+        },
+
+        timestamp: {
+            type: Date,
+            default: Date.now
+        }
+    },
+    { _id: false }
+);
+
+const taskSchema = new mongoose.Schema({
+    ownerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        index: true
+    },
     title: {
         type: String,
         required: true,
@@ -23,7 +97,18 @@ const taskSchema = new mongoose.Schema({
     relatedModel: {
         type: String,
         required: true,
-        enum: ["Lead", "Client"]
+        enum: ["Lead", "Client", "Project"]
+    },
+
+    assignedTo: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
 
     status: {
@@ -31,6 +116,7 @@ const taskSchema = new mongoose.Schema({
         enum: [
             "Pending",
             "In Progress",
+            "On Hold",
             "Completed",
             "Cancelled"
         ],
@@ -42,7 +128,8 @@ const taskSchema = new mongoose.Schema({
         enum: [
             "Low",
             "Medium",
-            "High"
+            "High",
+            "Critical"
         ],
         default: "Medium"
     },
@@ -52,23 +139,45 @@ const taskSchema = new mongoose.Schema({
         required: true
     },
 
-    createdBy: {
-        type: String,
-        default: "AI Agent"
-    },
-
     completedAt: {
         type: Date,
         default: null
     },
 
-    createdAt: {
+    estimatedHours: {
+        type: Number,
+        default: 0
+    },
+
+    actualHours: {
+        type: Number,
+        default: 0
+    },
+
+    notes: [{
+        type: String,
+        trim: true
+    }],
+
+    comments: [commentSchema],
+
+    attachments: [attachmentSchema],
+
+    reminderAt: {
         type: Date,
-        default: Date.now
-    }
+        default: null
+    },
 
+    aiGenerated: {
+        type: Boolean,
+        default: false
+    },
+
+    history: [historySchema]
+
+}, {
+    timestamps: true
 });
-
 
 const Task = mongoose.model("Task", taskSchema);
 

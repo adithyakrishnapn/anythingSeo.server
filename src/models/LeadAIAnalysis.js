@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
 
 const leadAIAnalysisStructure = {
+    ownerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        index: true
+    },
     leadId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
