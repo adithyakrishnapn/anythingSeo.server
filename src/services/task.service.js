@@ -1,7 +1,7 @@
 import Task from "../models/task.model.js";
 import { getClientForTask } from "../tools/task.tools.js";
 import { getLeadAnalysisByLeadId } from "../tools/lead.tools.js";
-import { generateFollowUpAnalysis } from "../agents/followUp/followUp.agent.js";
+import { generateFollowUpAnalysis } from "../agents/followUp/followup.agent.js";
 import { analyzeLead } from "../agents/lead/lead.agent.js";
 import followupTemplate from "../templates/followup.template.js";
 import { sendEmail } from "../services/email.service.js";

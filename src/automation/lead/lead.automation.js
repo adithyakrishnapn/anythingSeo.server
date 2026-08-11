@@ -1,7 +1,7 @@
 import { analyzeLead } from "../../agents/lead/lead.agent.js";
 import { shouldSendFollowup, shouldCreateTaskForLead } from "./lead.rules.js";
 import { sendEmail } from "../../services/email.service.js";
-import { generateFollowUpAnalysis } from "../../agents/followUp/followUp.agent.js";
+import { generateFollowUpAnalysis } from "../../agents/followUp/followup.agent.js";
 import { getLeadAnalysisByLeadId } from "../../tools/lead.tools.js";
 import followupTemlate from "../../templates/followup.template.js";
 import { createTaskForLead } from "../../agents/task/task.agent.js";

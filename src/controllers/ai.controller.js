@@ -1,5 +1,5 @@
 import { analyzeLead } from "../agents/lead/lead.agent.js";
-import { generateFollowUpAnalysis } from "../agents/followUp/followUp.agent.js";
+import { generateFollowUpAnalysis } from "../agents/followUp/followup.agent.js";
 import { getLeadById, getLeadAnalysisByLeadId } from "../tools/lead.tools.js";
 import { sendEmail } from "../services/email.service.js";
 import followupTemlate from "../templates/followup.template.js";

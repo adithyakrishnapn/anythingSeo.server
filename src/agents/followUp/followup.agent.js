@@ -1,6 +1,6 @@
 import { generateResponse } from "../../ai/ollama.service.js";
 
-import followupInstructions from "./followUp.instructions.js";
+import followupInstructions from "./followup.instructions.js";
 
 import validateFollowUpAnalysis from "./followup.validation.js";
 
